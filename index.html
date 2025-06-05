@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy 2nd Anniversary, Rohaniya!</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif; 
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .text-glow-cyan {
+      text-shadow: 0 0 6px rgba(34, 211, 238, 0.7), 0 0 10px rgba(34, 211, 238, 0.5), 0 0 14px rgba(34, 211, 238, 0.3);
+    }
+    .text-glow-purple {
+      text-shadow: 0 0 5px #c084fc, 0 0 10px #c084fc, 0 0 15px #c084fc;
+    }
+    .text-glow-white { /* For letter card text */
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6);
+    }
+    .text-glow-gold { /* For final letter elements */
+      text-shadow: 0 0 6px rgba(251, 191, 36, 0.8), 0 0 12px rgba(245, 158, 11, 0.6), 0 0 18px rgba(217, 119, 6, 0.4);
+    }
+    
+    @keyframes gentle-drift {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(1.5px, -3px) rotate(0.3deg); }
+      50% { transform: translate(0px, 0px) rotate(0deg); }
+      75% { transform: translate(-1.5px, 3px) rotate(-0.3deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+    .animate-gentle-drift {
+      animation-name: gentle-drift;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes candle-flicker {
+      0%, 100% { opacity: 1; transform: scaleY(1); }
+      50% { opacity: 0.7; transform: scaleY(0.95); }
+    }
+    .animate-candle-flicker {
+      animation: candle-flicker 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulsate-glow { /* For "Send a Cosmic Hug" button */
+      0%, 100% { box-shadow: 0 0 10px rgba(168, 85, 247, 0.4), 0 0 20px rgba(168, 85, 247, 0.3); opacity: 0.85; }
+      50% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.7), 0 0 30px rgba(168, 85, 247, 0.5); opacity: 1; }
+    }
+    .animate-pulsate-glow {
+      animation: pulsate-glow 2.5s infinite ease-in-out;
+    }
+
+    @keyframes kitty-float-in {
+      from { transform: translateY(50px) scale(0.8); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .animate-kitty-float-in {
+      animation: kitty-float-in 1.5s ease-out forwards;
+    }
+
+    @keyframes particle-burst {
+      0% { transform: scale(0.5) translateY(0px) rotate(0deg); opacity: 0; }
+      20% { opacity: 1; } /* Appear quickly */
+      100% { transform: scale(1.3) translateY(-30px) translateX(var(--particle-x-end, 0px)) rotate(var(--particle-rotate-end, 360deg)); opacity: 0; }
+    }
+    /* .animate-particle-burst is applied directly in FinalScreen.tsx with dynamic end points */
+    
+    @keyframes glow-wave {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.5); opacity: 0.7; }
+      100% { transform: scale(2.8); opacity: 0; }
+    }
+    .animate-glow-wave {
+      animation: glow-wave 2s ease-out forwards;
+    }
+
+    @keyframes typewriter-blink-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: #c084fc; } /* purple-400 */
+    }
+    .animate-typewriter-blink-caret {
+      animation: typewriter-blink-caret 0.75s step-end infinite;
+    }
+
+    @keyframes pulse-heart { /* For small heart icon on letter card */
+      0%, 100% { transform: scale(1); opacity: 0.9; filter: drop-shadow(0 0 3px #f472b6); }
+      50% { transform: scale(1.25); opacity: 1; filter: drop-shadow(0 0 6px #f472b6); }
+    }
+    .animate-pulse-heart {
+      animation: pulse-heart 1.5s ease-in-out infinite;
+    }
+
+    @keyframes card-reveal { /* For LoveLetterCard entry */
+      from { opacity: 0; transform: translateY(15px) scale(0.92); }
+      to { opacity: 1; transform: translateY(0px) scale(1); }
+    }
+    .animate-card-reveal {
+      animation: card-reveal 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+    
+    @keyframes hidden-message-fade-in {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0px); }
+    }
+    .animate-hidden-message-fade-in {
+      animation: hidden-message-fade-in 1s ease-out forwards;
+    }
+
+    @keyframes visual-sparkle-open { /* For letter card opening chime */
+      0% { transform: scale(0.5); opacity: 1; filter: brightness(1.5); }
+      100% { transform: scale(1.8); opacity: 0; filter: brightness(1); }
+    }
+    .animate-visual-sparkle-open {
+      animation: visual-sparkle-open 0.6s ease-out forwards;
+    }
+
+    /* Animations for enhanced Love Letters section */
+    @keyframes nebula-drift-1 {
+      0% { transform: translateX(-15%) translateY(-10%) rotate(0deg) scale(1.1); opacity: 0.08; }
+      50% { transform: translateX(10%) translateY(15%) rotate(180deg) scale(1); opacity: 0.22; }
+      100% { transform: translateX(-15%) translateY(-10%) rotate(360deg) scale(1.1); opacity: 0.08; }
+    }
+    @keyframes nebula-drift-2 {
+      0% { transform: translateX(10%) translateY(15%) rotate(0deg) scale(1); opacity: 0.12; }
+      50% { transform: translateX(-10%) translateY(-20%) rotate(-180deg) scale(1.1); opacity: 0.25; }
+      100% { transform: translateX(10%) translateY(15%) rotate(-360deg) scale(1); opacity: 0.12; }
+    }
+    .animate-nebula-drift-1 { animation: nebula-drift-1 140s linear infinite; }
+    .animate-nebula-drift-2 { animation: nebula-drift-2 170s linear infinite reverse; }
+
+    @keyframes shooting-star-anim {
+      0% { transform: translateX(var(--star-start-x, -100%)) translateY(var(--star-start-y, -100%)) scaleX(0.05) scaleY(0.3); opacity: 0; }
+      10% { opacity: 0.9; } /* Brighter for a moment */
+      90% { opacity: 0.9; }
+      100% { transform: translateX(var(--star-end-x, 100vw)) translateY(var(--star-end-y, 100vh)) scaleX(1.2) scaleY(0.02); opacity: 0; }
+    }
+    /* .animate-shooting-star is applied via style prop in component */
+    
+    @keyframes sparkly-heart-streak-anim {
+      0% { transform: translateX(var(--heart-start-x, 110%)) translateY(var(--heart-start-y, 20%)) scale(0.4); opacity: 0; }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.8; }
+      100% { transform: translateX(var(--heart-end-x, -10%)) translateY(var(--heart-end-y, 80%)) scale(1.3); opacity: 0; }
+    }
+    /* .animate-sparkly-heart-streak is applied via style prop in component */
+
+    @keyframes envelope-hover-pulse-effect {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.08) rotate(2.5deg); }
+    }
+    .animate-envelope-hover-pulse-effect { animation: envelope-hover-pulse-effect 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+    /* This class will be applied by Tailwind's group-hover system */
+
+    @keyframes stardust-pulse {
+      0%, 100% { opacity: 0.4; transform: scale(0.7); box-shadow: 0 0 1px #fff; }
+      50% { opacity: 0.9; transform: scale(1.1); box-shadow: 0 0 3px #fff, 0 0 5px #bfdbfe; } /* white, blue-200 */
+    }
+    .animate-stardust-pulse { animation: stardust-pulse 2.2s ease-in-out infinite alternate; }
+
+    @keyframes category-card-hover-effect { /* Applied on hover for CategoryCard */
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.03); }
+    }
+    .animate-category-card-hover { animation: category-card-hover-effect 0.3s ease-out; }
+
+
+    @keyframes final-envelope-glow-anim {
+      0%, 100% { border-color: rgba(251, 191, 36, 0.7); box-shadow: 0 0 18px rgba(251, 191, 36, 0.6), 0 0 30px rgba(245, 158, 11, 0.4); } /* amber-400, amber-500 */
+      50% { border-color: rgba(252, 211, 77, 1); box-shadow: 0 0 30px rgba(252, 211, 77, 0.9), 0 0 50px rgba(245, 158, 11, 0.6); } /* amber-300 */
+    }
+    .animate-final-envelope-glow { animation: final-envelope-glow-anim 1.8s infinite ease-in-out; }
+
+    @keyframes letter-icon-drift-up {
+      from { transform: translateY(0) scale(1.1); opacity: 0.8; }
+      to { transform: translateY(-120px) scale(0.4); opacity: 0; }
+    }
+    .animate-letter-icon-drift-up { animation: letter-icon-drift-up 2.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards; }
+    
+    @keyframes progress-heart-fill-anim {
+      from { opacity: 0.6; transform: scale(0.85) rotate(-5deg); }
+      to { opacity: 1; transform: scale(1.15) rotate(0deg); }
+    }
+    .animate-progress-heart-fill { animation: progress-heart-fill-anim 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+    /* General appear animation for elements */
+    @keyframes appear-subtle {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0px); }
+    }
+    .animate-appear-subtle { animation: appear-subtle 0.6s ease-out forwards; }
+
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-black">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
