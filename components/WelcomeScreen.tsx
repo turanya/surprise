@@ -9,6 +9,15 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Define vibrant neon color palette in component scope
+  const colors = [
+    'rgba(0, 247, 255, 0.8)',   // Electric Cyan
+    'rgba(255, 0, 231, 0.8)',   // Neon Pink
+    'rgba(0, 255, 149, 0.8)',   // Electric Green
+    'rgba(255, 234, 0, 0.8)',   // Bright Yellow
+    'rgba(255, 111, 0, 0.8)'    // Vivid Orange
+  ];
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -32,24 +41,16 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
       life: number;
     }[] = [];
     
-    const colors = [
-      'rgba(139, 92, 246, 0.8)', // Deep purple
-      'rgba(192, 132, 252, 0.8)', // Light purple
-      'rgba(249, 168, 212, 0.8)', // Pink
-      'rgba(255, 255, 255, 0.8)', // White
-      'rgba(236, 72, 153, 0.8)'   // Hot pink
-    ];
-    
     // Create initial particles
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 120; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 4 + 1,
-        speedX: (Math.random() - 0.5) * 1.2,
-        speedY: (Math.random() - 0.5) * 1.2,
+        size: Math.random() * 5 + 1,
+        speedX: (Math.random() - 0.5) * 1.5,
+        speedY: (Math.random() - 0.5) * 1.5,
         color: colors[Math.floor(Math.random() * colors.length)],
-        alpha: Math.random() * 0.5 + 0.5,
+        alpha: Math.random() * 0.7 + 0.3,
         life: Math.random() * 100
       });
     }
@@ -60,19 +61,15 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       // Create new particles occasionally
-      if (Math.random() < 0.4 && particles.length < 200) {
+      if (Math.random() < 0.5 && particles.length < 250) {
         particles.push({
-          x: Math.random() < 0.5 ? 
-              (Math.random() < 0.5 ? 0 : canvas.width) : 
-              Math.random() * canvas.width,
-          y: Math.random() < 0.5 ? 
-              (Math.random() < 0.5 ? 0 : canvas.height) : 
-              Math.random() * canvas.height,
-          size: Math.random() * 5 + 1,
-          speedX: (Math.random() - 0.5) * 1.5,
-          speedY: (Math.random() - 0.5) * 1.5,
+          x: Math.random() < 0.5 ? 0 : canvas.width,
+          y: Math.random() < 0.5 ? 0 : canvas.height,
+          size: Math.random() * 6 + 2,
+          speedX: (Math.random() - 0.5) * 2,
+          speedY: (Math.random() - 0.5) * 2,
           color: colors[Math.floor(Math.random() * colors.length)],
-          alpha: Math.random() * 0.7 + 0.3,
+          alpha: Math.random() * 0.8 + 0.2,
           life: Math.random() * 100
         });
       }
@@ -80,7 +77,16 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
       particles.forEach((particle, index) => {
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color.replace('0.8', particle.alpha.toString());
+        
+        // Create glow effect
+        const gradient = ctx.createRadialGradient(
+          particle.x, particle.y, 0,
+          particle.x, particle.y, particle.size * 3
+        );
+        gradient.addColorStop(0, particle.color);
+        gradient.addColorStop(1, 'transparent');
+        
+        ctx.fillStyle = gradient;
         ctx.fill();
         
         // Update position
@@ -96,8 +102,8 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
         
         // Remove dead particles
         if (particle.life <= 0 || 
-            particle.x < -50 || particle.x > canvas.width + 50 || 
-            particle.y < -50 || particle.y > canvas.height + 50) {
+            particle.x < -100 || particle.x > canvas.width + 100 || 
+            particle.y < -100 || particle.y > canvas.height + 100) {
           particles.splice(index, 1);
         }
       });
@@ -129,7 +135,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
   return (
     <div 
       ref={containerRef}
-      className="relative flex flex-col items-center justify-center text-center p-4 min-h-screen overflow-hidden bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900"
+      className="relative flex flex-col items-center justify-center text-center p-4 min-h-screen overflow-hidden bg-gradient-to-br from-[#0a0a2a] via-[#1a1a4a] to-[#2a0a45]"
     >
       {/* Animated background particles */}
       <canvas 
@@ -137,83 +143,116 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
         className="absolute inset-0 w-full h-full z-0"
       />
       
-      {/* Floating decorative shapes */}
-      {[...Array(8)].map((_, i) => (
+      {/* Floating geometric shapes with vibrant colors */}
+      {[...Array(12)].map((_, i) => (
         <div 
           key={i}
           className="absolute z-0"
           style={{
             top: `${Math.random() * 100}%`,
             left: `${Math.random() * 100}%`,
-            animation: `float${i % 3 + 1} ${15 + Math.random() * 15}s infinite ease-in-out`,
-            opacity: 0.1 + Math.random() * 0.2
+            animation: `float${i % 3 + 1} ${10 + Math.random() * 15}s infinite ease-in-out`,
+            opacity: 0.3 + Math.random() * 0.3,
+            filter: 'blur(2px)'
           }}
         >
-          <svg width={40 + Math.random() * 60} height={40 + Math.random() * 60} viewBox="0 0 100 100">
-            {i % 3 === 0 && <circle cx="50" cy="50" r="40" fill="rgba(192, 132, 252, 0.15)" />}
-            {i % 3 === 1 && <polygon points="50,10 90,90 10,90" fill="rgba(249, 168, 212, 0.15)" />}
-            {i % 3 === 2 && <rect x="10" y="10" width="80" height="80" fill="rgba(139, 92, 246, 0.15)" />}
+          <svg 
+            width={40 + Math.random() * 80} 
+            height={40 + Math.random() * 80} 
+            viewBox="0 0 100 100"
+            className="opacity-70"
+          >
+            {i % 4 === 0 && <circle cx="50" cy="50" r="40" fill="url(#grad1)" />}
+            {i % 4 === 1 && <polygon points="50,10 90,90 10,90" fill="url(#grad2)" />}
+            {i % 4 === 2 && <rect x="10" y="10" width="80" height="80" fill="url(#grad3)" />}
+            {i % 4 === 3 && (
+              <path 
+                d="M50,10 Q90,50 50,90 Q10,50 50,10 Z" 
+                fill="url(#grad4)" 
+              />
+            )}
+            
+            {/* Define vibrant gradients */}
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#ff00e7" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="#00f7ff" stopOpacity="0.3" />
+              </linearGradient>
+              <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#00ff95" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="#ff00e7" stopOpacity="0.3" />
+              </linearGradient>
+              <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#ff6f00" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="#00ff95" stopOpacity="0.3" />
+              </linearGradient>
+              <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#ffea00" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="#ff6f00" stopOpacity="0.3" />
+              </linearGradient>
+            </defs>
           </svg>
         </div>
       ))}
       
       {/* Content container */}
-      <div className="relative z-10 flex flex-col items-center justify-center max-w-3xl">
+      <div className="relative z-10 flex flex-col items-center justify-center max-w-3xl backdrop-blur-sm bg-black/20 rounded-3xl p-12 border border-[#ff00e7]/30 shadow-[0_0_60px_#ff00e7/30]">
         {/* Animated profile container */}
         <div className="mb-12 relative">
-          {/* Floating profile picture with glow */}
-          <div className="animate-[float-profile_8s_ease-in-out_infinite]">
-            <div className="relative">
-              {/* Glowing ring */}
-              <div className="absolute inset-0 rounded-full animate-[pulse-ring_4s_ease-in-out_infinite] border-4 border-purple-400 opacity-70"></div>
-              
-              {/* Profile image */}
-              <img 
-                src="/Black selfie.jpg" 
-                alt="Profile Picture" 
-                className="w-40 h-40 md:w-56 md:h-56 object-cover rounded-full border-4 border-white shadow-[0_0_40px_#c084fc,0_0_80px_#f9a8d4]"
-              />
-              
-              {/* Floating particles around profile */}
-              {[...Array(8)].map((_, i) => (
-                <div 
-                  key={i}
-                  className="absolute w-3 h-3 rounded-full bg-purple-400 animate-[orbit_8s_linear_infinite]"
-                  style={{
-                    top: '50%',
-                    left: '50%',
-                    animationDelay: `${-i * 1.2}s`,
-                    transform: `rotate(${i * 45}deg) translate(100px) rotate(-${i * 45}deg)`
-                  }}
-                ></div>
-              ))}
-            </div>
+          {/* Glowing ring */}
+          <div className="absolute inset-0 rounded-full animate-[pulse-ring_3s_ease-in-out_infinite] border-4 border-[#00f7ff] opacity-70"></div>
+          
+          {/* Floating profile picture */}
+          <div className="animate-[float-profile_6s_ease-in-out_infinite]">
+            <img 
+              src="/Black selfie.jpg" 
+              alt="Profile Picture" 
+              className="w-44 h-44 md:w-64 md:h-64 object-cover rounded-full border-4 border-white shadow-[0_0_50px_#00f7ff,0_0_100px_#ff00e7]"
+            />
           </div>
+          
+          {/* Floating particles around profile */}
+          {[...Array(12)].map((_, i) => (
+            <div 
+              key={i}
+              className="absolute w-4 h-4 rounded-full animate-[orbit_8s_linear_infinite]"
+              style={{
+                top: '50%',
+                left: '50%',
+                animationDelay: `${-i * 0.8}s`,
+                transform: `rotate(${i * 30}deg) translate(120px) rotate(-${i * 30}deg)`,
+                background: `radial-gradient(circle, ${colors[i % colors.length]}, transparent)`,
+                boxShadow: `0 0 15px ${colors[i % colors.length]}`
+              }}
+            ></div>
+          ))}
         </div>
         
-        {/* Animated title text */}
-        <h1 className="text-4xl md:text-6xl font-bold mb-8 text-white animate-[text-glow_3s_ease-in-out_infinite]">
-          Welcome to Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-purple-300">Universe</span>
+        {/* Animated title text with gradient */}
+        <h1 className="text-5xl md:text-7xl font-bold mb-8 text-white animate-[text-glow_2s_ease-in-out_infinite]">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00f7ff] to-[#ff00e7]">
+            Welcome to Our Universe
+          </span>
         </h1>
         
         {/* Animated subtitle */}
-        <p className="text-xl md:text-2xl mb-10 text-purple-200 max-w-2xl animate-[fadeIn_2s_ease-out]">
-          Where every moment is a beautiful journey through the stars
+        <p className="text-xl md:text-2xl mb-10 text-[#ffea00] max-w-2xl animate-[fadeIn_2s_ease-out]">
+          Where digital dreams become reality
         </p>
         
-        {/* Floating button */}
-        <div className="mt-8 animate-[float-button_5s_ease-in-out_infinite]">
+        {/* Floating button with neon glow */}
+        <div className="mt-8 animate-[float-button_4s_ease-in-out_infinite]">
           <GlowingButton 
             onClick={onEnter} 
-            className="text-xl md:text-2xl px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 transition-all duration-300 transform hover:scale-105 shadow-lg"
+            className="text-xl md:text-2xl px-10 py-5 bg-gradient-to-r from-[#ff00e7] to-[#00f7ff] hover:from-[#ff00e7] hover:to-[#00ff95] transition-all duration-300 transform hover:scale-110 shadow-[0_0_30px_#ff00e7]"
           >
-            <span className="relative flex items-center">
+            <span className="relative flex items-center font-bold tracking-wider">
               Enter Our Universe 
               {/* Animated arrow icon */}
               <svg 
                 className="ml-3 animate-[pulse-arrow_1.5s_ease-in-out_infinite]"
-                width="24" 
-                height="24" 
+                width="28" 
+                height="28" 
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -228,12 +267,13 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
       </div>
 
       {/* Background animated elements */}
-      <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-purple-900/70 to-transparent z-5"></div>
+      <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-[#ff00e7]/20 to-transparent z-5"></div>
       
-      {/* Floating geometric elements */}
-      <div className="absolute top-1/4 right-10 w-24 h-24 rounded-full bg-pink-500/10 animate-[pulse-slow_8s_ease-in-out_infinite]"></div>
-      <div className="absolute top-1/3 left-10 w-16 h-16 rotate-45 bg-purple-500/10 animate-[pulse-slow_7s_ease-in-out_infinite]"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-20 h-20 rounded-full bg-indigo-500/10 animate-[pulse-slow_9s_ease-in-out_infinite]"></div>
+      {/* Large floating geometric elements */}
+      <div className="absolute top-1/4 right-10 w-36 h-36 rounded-full bg-[#00f7ff]/10 animate-[pulse-slow_8s_ease-in-out_infinite]"></div>
+      <div className="absolute top-1/3 left-10 w-24 h-24 rotate-45 bg-[#ff00e7]/10 animate-[pulse-slow_7s_ease-in-out_infinite]"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-28 h-28 rounded-full bg-[#00ff95]/10 animate-[pulse-slow_9s_ease-in-out_infinite]"></div>
+      <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-[#ff6f00]/10 animate-[pulse-slow_10s_ease-in-out_infinite] rounded-[50%]"></div>
 
       {/* Combined animations */}
       <style>{`
@@ -244,62 +284,86 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
         
         @keyframes float-button {
           0% { transform: translateY(0) rotate(-0.5deg); }
-          50% { transform: translateY(-15px) rotate(0.5deg); }
+          50% { transform: translateY(-20px) rotate(0.5deg); box-shadow: 0 0 40px #ff00e7; }
           100% { transform: translateY(0) rotate(-0.5deg); }
         }
         
         @keyframes float-profile {
           0% { transform: translateY(0) rotate(0deg); }
-          25% { transform: translateY(-10px) rotate(1deg); }
+          25% { transform: translateY(-15px) rotate(2deg); }
           50% { transform: translateY(0) rotate(0deg); }
-          75% { transform: translateY(-8px) rotate(-1deg); }
+          75% { transform: translateY(-12px) rotate(-2deg); }
           100% { transform: translateY(0) rotate(0deg); }
         }
         
         @keyframes pulse-ring {
-          0% { transform: scale(1); opacity: 0.7; box-shadow: 0 0 0 0px rgba(192, 132, 252, 0.5); }
-          50% { transform: scale(1.05); opacity: 0.4; box-shadow: 0 0 0 15px rgba(192, 132, 252, 0); }
-          100% { transform: scale(1); opacity: 0.7; box-shadow: 0 0 0 0px rgba(192, 132, 252, 0); }
+          0% { 
+            transform: scale(1); 
+            opacity: 0.7; 
+            box-shadow: 0 0 0 0px rgba(0, 247, 255, 0.5),
+                        0 0 0 0px rgba(255, 0, 231, 0.5); 
+          }
+          50% { 
+            transform: scale(1.05); 
+            opacity: 0.4; 
+            box-shadow: 0 0 0 20px rgba(0, 247, 255, 0),
+                        0 0 0 40px rgba(255, 0, 231, 0); 
+          }
+          100% { 
+            transform: scale(1); 
+            opacity: 0.7; 
+            box-shadow: 0 0 0 0px rgba(0, 247, 255, 0),
+                        0 0 0 0px rgba(255, 0, 231, 0); 
+          }
         }
         
         @keyframes orbit {
-          from { transform: rotate(0deg) translateX(80px) rotate(0deg); }
-          to { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
+          from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+          to { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
         }
         
         @keyframes pulse-arrow {
           0% { transform: translateX(0); opacity: 1; }
-          50% { transform: translateX(8px); opacity: 0.7; }
+          50% { transform: translateX(10px); opacity: 0.7; }
           100% { transform: translateX(0); opacity: 1; }
         }
         
         @keyframes text-glow {
-          0% { text-shadow: 0 0 5px rgba(255,255,255,0.2); }
-          50% { text-shadow: 0 0 20px rgba(255,255,255,0.6); }
-          100% { text-shadow: 0 0 5px rgba(255,255,255,0.2); }
+          0% { 
+            text-shadow: 0 0 5px rgba(0, 247, 255, 0.5),
+                         0 0 10px rgba(255, 0, 231, 0.3); 
+          }
+          50% { 
+            text-shadow: 0 0 20px rgba(0, 247, 255, 0.8),
+                         0 0 40px rgba(255, 0, 231, 0.6); 
+          }
+          100% { 
+            text-shadow: 0 0 5px rgba(0, 247, 255, 0.5),
+                         0 0 10px rgba(255, 0, 231, 0.3); 
+          }
         }
         
         @keyframes float1 {
           0% { transform: translateY(0) translateX(0) rotate(0deg); }
-          50% { transform: translateY(-40px) translateX(20px) rotate(10deg); }
+          50% { transform: translateY(-60px) translateX(30px) rotate(15deg); }
           100% { transform: translateY(0) translateX(0) rotate(0deg); }
         }
         
         @keyframes float2 {
           0% { transform: translateY(0) translateX(0) rotate(0deg); }
-          50% { transform: translateY(-60px) translateX(-30px) rotate(-15deg); }
+          50% { transform: translateY(-80px) translateX(-40px) rotate(-20deg); }
           100% { transform: translateY(0) translateX(0) rotate(0deg); }
         }
         
         @keyframes float3 {
           0% { transform: translateY(0) translateX(0) rotate(0deg); }
-          50% { transform: translateY(-50px) translateX(40px) rotate(20deg); }
+          50% { transform: translateY(-70px) translateX(50px) rotate(25deg); }
           100% { transform: translateY(0) translateX(0) rotate(0deg); }
         }
         
         @keyframes pulse-slow {
           0% { transform: scale(1); opacity: 0.1; }
-          50% { transform: scale(1.1); opacity: 0.2; }
+          50% { transform: scale(1.2); opacity: 0.2; }
           100% { transform: scale(1); opacity: 0.1; }
         }
       `}</style>
